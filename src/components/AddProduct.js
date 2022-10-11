@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -13,6 +13,7 @@ import { addProduct } from '../redux/products/productsSlice';
 
 export default function AddProduct() {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [productName, setProductName] = useState('')
     const [productPrice, setProductPrice] = useState('')
@@ -20,12 +21,13 @@ export default function AddProduct() {
 
     const handleSubmit = (e) => {
         const addData = {
-            id:"5",
-            productName,productPrice, stock
+            productName,productPrice,stock
         }
         e.preventDefault();
         dispatch(addProduct(addData))
         console.log(productName, productPrice, stock)
+        navigate('/dashboard/user')
+
     }
     return (
         <Paper elevation={3}>

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = [
     {id: '1', name: 'mobile', price: 450, stockAvailable: true},
@@ -14,17 +14,20 @@ export const productsSlice = createSlice({
         addProduct:(state, action) => {
             console.log(action.payload)
             const product = {
-                id: action.payload.id,
+                id: nanoid(),
                 name: action.payload.productName,
                 price: action.payload.productPrice,
                 stockAvailable: action.payload.stock
-            }
+        }
             console.log(product, 'new product')
             state.push(product)
-        }
+        },
+        deleteProduct:(state, action) => {
+            return state.filter((product) => product.id !== action.payload.id)
+        },
     }
 })
 
 
-export const {addProduct} = productsSlice.actions
-export default productsSlice.reducer
+export const {addProduct, deleteProduct} = productsSlice.actions
+export const productsReducer = productsSlice.reducer

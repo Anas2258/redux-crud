@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import AddProduct from './components/AddProduct';
+import EditProduct from './components/EditProduct';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,10 @@ export default function Router() {
     {
       path: 'addProduct',
       element: <AddProduct />,
+    },
+    {
+      path: 'editProduct/:id',
+      element: <EditProduct />,
     },
     {
       path: 'login',
