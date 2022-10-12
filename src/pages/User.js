@@ -11,11 +11,13 @@ import {
   Stack,
   Avatar,
   Button,
+  Modal,
   Checkbox,
   TableRow,
   TableBody,
   TableCell,
   Container,
+  Paper,
   Typography,
   TableContainer,
   TablePagination,
@@ -28,17 +30,20 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 import { addProduct, deleteProduct } from '../redux/products/productsSlice';
+import DescripModal from '../components/DescripModal';
 // mock
 import USERLIST from '../_mock/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  // { id: 'avatar', label: 'Avatar', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
+  { id: 'desc', label: 'Description', alignRight: false },
   { id: 'price', label: 'Price', alignRight: false },
   { id: 'Availability', label: 'Availability', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  // { id: 'isVerified', label: 'Verified', alignRight: false },
+  // { id: 'status', label: 'Status', alignRight: false },
   // { id: '' },
 ];
 
@@ -60,24 +65,24 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// function applySortFilter(array, comparator, query) {
-//   const stabilizedThis = array.map((el, index) => [el, index]);
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) return order;
-//     return a[1] - b[1];
-//   });
-//   if (query) {
-//     return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-//   }
-//   return stabilizedThis.map((el) => el[0]);
-// }
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (query) {
+    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  }
+  return stabilizedThis.map((el) => el[0]);
+}
 
 
 export default function User() {
 
-  const dispatch = useDispatch() 
-  
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
 
   const [page, setPage] = useState(0);
@@ -142,8 +147,8 @@ export default function User() {
 
   const handleDelete = (id) => {
     console.log(id, 'id')
-    dispatch(deleteProduct({id}))
-  } 
+    dispatch(deleteProduct({ id }))
+  }
 
 
   // const getUsers = () => {
@@ -161,13 +166,13 @@ export default function User() {
   // useEffect(() => {
   //   getUsers()
   // },[])
-  
-  
+
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productList.length) : 0;
 
-  // const filteredUsers = applySortFilter(productList, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(productList, getComparator(order, orderBy), filterName);
 
-  // const isUserNotFound = filteredUsers.length === 0;
+  const isUserNotFound = filteredUsers.length === 0;
 
   return (
     <Page title="User">
@@ -197,60 +202,69 @@ export default function User() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {productList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    const { id, name, price, stockAvailable } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
-
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            {/* <Avatar alt={name} src={avatarUrl} /> */}
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-                        <TableCell align="left">{price}</TableCell>
-                        {/* <TableCell align="left">{role}</TableCell> */}
-                        <TableCell align="left">{stockAvailable ? 'Yes' : 'No'}</TableCell>
-                        {/* <TableCell align="left">
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                      const { id, avatar, name, description, price, stockAvailable } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
+                      return (
+                        <TableRow
+                          hover
+                          key={id}
+                          tabIndex={-1}
+                          role="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              {avatar.map(img => (
+                                <Avatar alt={name} src={img} />
+                              ))}
+                              {/* <Avatar alt={name} src={avatar[0]} />
+                            <Avatar alt={name} src={avatar[1]} /> */}
+                              <Typography variant="subtitle2" noWrap>
+                                {name}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Paper elevation={3} style={{padding:'7px'}}>
+                              {/* {console.log(description, 'descrip')} */}
+                                <DescripModal description={description}/>
+                            </Paper>
+                          </TableCell>
+                          <TableCell align="left">{price}</TableCell>
+                          {/* <TableCell align="left">{role}</TableCell> */}
+                          <TableCell align="left">{stockAvailable ? 'Yes' : 'No'}</TableCell>
+                          {/* <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell> */}
 
-                        <TableCell align="right">
-                          {/* <UserMoreMenu />   */}
-                          <Button variant='contained' onClick={() => handleDelete(id)}><Iconify icon="eva:edit-fill" width={14} height={14} />Delete </Button>
-                        </TableCell>
-                        <TableCell align="right">
-                          {/* <UserMoreMenu />   */}
-                          <Button variant="contained" component={RouterLink} to={`/editProduct/${id}`} startIcon={<Iconify icon="eva:edit-fill" width={14} height={14} />}>
-                            Edit 
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          <TableCell align="right">
+                            {/* <UserMoreMenu />   */}
+                            <Button variant='contained' onClick={() => handleDelete(id)}><Iconify icon="eva:edit-fill" width={14} height={14} />Delete </Button>
+                          </TableCell>
+                          <TableCell align="right">
+                            {/* <UserMoreMenu />   */}
+                            <Button variant="contained" component={RouterLink} to={`/editProduct/${id}`} startIcon={<Iconify icon="eva:edit-fill" width={14} height={14} />}>
+                              Edit
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
                 </TableBody>
-{/* 
+                {/* 
                 {isUserNotFound && (
                   <TableBody>
                     <TableRow>

@@ -20,7 +20,7 @@ export default function AddProduct() {
 
     const handleSubmit = (e) => {
         const addData = {
-            productName,productPrice,stock
+            productName, productPrice, stock
         }
         e.preventDefault();
         dispatch(addProduct(addData))
@@ -58,6 +58,19 @@ export default function AddProduct() {
                             onChange={(e) => setProductPrice(e.target.value)}
                         />
                     </Grid>
+                    {/* <Grid item xs={12}>
+                        <input
+                            accept="image/*"
+                            type="file"
+                            id="select-image"
+                            style={{ display: 'none' }}
+                        />
+                        <label htmlFor="select-image">
+                            <Button variant="contained" color="primary" component="span">
+                                Upload Image
+                            </Button>
+                        </label>
+                    </Grid> */}
                     <Grid item xs={12}>
                         <FormControlLabel
                             control={<Checkbox color="secondary" name="saveAddress" value={stock} onChange={(e) => setStock(e.target.checked)} />}
@@ -65,8 +78,8 @@ export default function AddProduct() {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <Button  type='submit' variant='contained'>
-                        {/* <Button component={RouterLink} to='/dashboard/user' type='submit' variant='contained'> */}
+                        <Button type='submit' variant='contained'>
+                            {/* <Button component={RouterLink} to='/dashboard/user' type='submit' variant='contained'> */}
                             Add
                         </Button>
                     </Grid>
