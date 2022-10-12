@@ -237,7 +237,7 @@ export default function User() {
                         </TableCell>
                         <TableCell align="right">
                           {/* <UserMoreMenu />   */}
-                          <Button variant="contained" component={RouterLink} to={`/editProduct/:${id}`} startIcon={<Iconify icon="eva:edit-fill" width={14} height={14} />}>
+                          <Button variant="contained" component={RouterLink} to={`/editProduct/${id}`} startIcon={<Iconify icon="eva:edit-fill" width={14} height={14} />}>
                             Edit 
                           </Button>
                         </TableCell>
