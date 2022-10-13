@@ -95,7 +95,9 @@ export default function EditProduct() {
   const [stock, setStock] = useState(stockAvailable)
   const [visible, setVisible] = useState(false);
   const [files, setFiles] = useState([]);
-  const [percentage, setPercentage] = useState(0.)
+  const [percentage, setPercentage] = useState(0)
+
+  console.log(files, 'files')
   // console.log(stock, 'bool')
 
   // useEffect(() => {
@@ -115,7 +117,7 @@ export default function EditProduct() {
       productName, productPrice, stock
     }
     e.preventDefault();
-    localStorage.setItem('imageList', JSON.stringify(files))
+    // localStorage.setItem('imageList', JSON.stringify(files))
     dispatch(editProduct(editData))
     console.log(imageUrl, productName, productPrice, stock)
     navigate('/dashboard/user')
@@ -159,10 +161,10 @@ export default function EditProduct() {
           })
         )
       );
-      
     }
   });
 
+  
   const style = React.useMemo(
     () => ({
       ...baseStyle,

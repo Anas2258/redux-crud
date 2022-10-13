@@ -175,6 +175,7 @@ export default function User() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
+
   return (
     <Page title="User">
       <Container>
@@ -207,6 +208,7 @@ export default function User() {
                     .map((row) => {
                       const { id, avatar, name, description, price, stockAvailable } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
+                      // console.log(avatar, 'avatar')
                       return (
                         <TableRow
                           hover
@@ -222,7 +224,7 @@ export default function User() {
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <AvatarGroup>
-                              {avatar.map((img, i) => (
+                              {avatar && avatar.map((img, i) => (
                                 <img key={i} alt={name} src={img} 
                                 style={{ maxHeight:'50px', borderRadius:'50%', maxWidth:'50px' }}   
                                 />
