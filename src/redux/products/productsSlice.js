@@ -1,7 +1,7 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const imgList = JSON.parse(localStorage.getItem('imageList'))
-const fileList = imgList.map(img => img.preview)
+const fileList = imgList && imgList.map(img => img.preview)
 console.log(fileList)
 
 const initialState = [
