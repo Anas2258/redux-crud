@@ -21,6 +21,7 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  AvatarGroup,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -220,11 +221,13 @@ export default function User() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              {avatar.map(img => (
-                                <Avatar alt={name} src={img} />
+                              <AvatarGroup>
+                              {avatar.map((img, i) => (
+                                <img key={i} alt={name} src={img} 
+                                style={{ maxHeight:'50px', borderRadius:'50%', maxWidth:'50px' }}   
+                                />
                               ))}
-                              {/* <Avatar alt={name} src={avatar[0]} />
-                            <Avatar alt={name} src={avatar[1]} /> */}
+                              </AvatarGroup>
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
