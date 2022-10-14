@@ -176,7 +176,7 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
 
-  return (
+  return (  
     <Page title="User">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -238,7 +238,7 @@ export default function User() {
                           <TableCell align="left">
                             <Paper elevation={3} style={{padding:'7px'}}>
                               {/* {console.log(description, 'descrip')} */}
-                                <DescripModal description={description}/>
+                                <DescripModal idForEdit={id}/>
                             </Paper>
                           </TableCell>
                           <TableCell align="left">{price}</TableCell>
@@ -269,16 +269,17 @@ export default function User() {
                     </TableRow>
                   )}
                 </TableBody>
-                {/* 
+                
                 {isUserNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                         <SearchNotFound searchQuery={filterName} />
+                        "Add Categories"
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                )} */}
+                )}
               </Table>
             </TableContainer>
           </Scrollbar>

@@ -29,6 +29,7 @@ export const productsSlice = createSlice({
         editProduct:(state, action) => {
             // console.log(action.payload)
             const {id, productName, productPrice, stock, imgUrlList} = action.payload
+            // console.log(ckData)
             console.log(id, productName, productPrice, stock,imgUrlList)
             const existingProduct = state.find(product => product.id === id)
            
@@ -45,6 +46,15 @@ export const productsSlice = createSlice({
                 existingProduct.stockAvailable = stock
             }
         },
+        editDesc:(state, action) => {
+            const {id, ckData} = action.payload
+
+            const existingProduct = state.find(product => product.id === id)
+
+            if(existingProduct){
+                existingProduct.description = ckData
+            }
+        },
         deleteProduct:(state, action) => {
             return state.filter((product) => product.id !== action.payload.id)
         },
@@ -52,5 +62,5 @@ export const productsSlice = createSlice({
 })
 
 
-export const {addProduct, deleteProduct, editProduct} = productsSlice.actions
+export const {addProduct, deleteProduct, editProduct,editDesc } = productsSlice.actions
 export const productsReducer = productsSlice.reducer

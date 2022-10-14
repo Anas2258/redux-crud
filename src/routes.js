@@ -12,6 +12,7 @@ import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import AddProduct from './components/AddProduct';
 import EditProduct from './components/EditProduct';
+import Editor from './components/Editor';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,10 @@ export default function Router() {
     {
       path: 'editProduct/:id',
       element: <EditProduct />,
+    },
+    {
+      path: 'ckEditor/:id',
+      element: <Editor />,
     },
     {
       path: 'login',

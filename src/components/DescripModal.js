@@ -3,7 +3,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import parse from 'html-react-parser';
+import Editor from './Editor';
 
 const style = {
     position: 'absolute',
@@ -17,13 +20,20 @@ const style = {
     p: 4,
 };
 
-const DescripModal = ({description}) => {
+const DescripModal = ({idForEdit}) => {
+
     const [open, setOpen] = React.useState(false);
+    // const [ckData, setCkData] = useState('')
+    const products = useSelector((state) => state.products)
+    const existingProduct = products.filter(product => product.id === idForEdit)
+
+    const { id,description } = existingProduct[0]
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     
     return (
-      <div>
+      <div >
         <Button onClick={handleOpen}>
             <Typography style={{color:'black'}}>
                 Item Description...
@@ -36,12 +46,16 @@ const DescripModal = ({description}) => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              {description}
+            {/* <Typography id="modal-modal-title" variant="h6" component="h2"> 
+            {<div dangerouslySetInnerHTML={{ __html: description }} />}
+            </Typography> */}
+            <Typography id="modal-modal-description" sx={{ mb: 8 }}>
+            {<div dangerouslySetInnerHTML={{ __html: description }} />}
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+
+            <Button variant='contained'  component={RouterLink} to={`/ckEditor/${id}`}>
+              Edit
+            </Button>
           </Box>
         </Modal>
       </div>
