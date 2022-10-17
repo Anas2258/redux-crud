@@ -31,6 +31,7 @@ import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 import { addProduct, deleteProduct } from '../redux/products/productsSlice';
+import { getCategories, deleteCategory } from '../redux/products/categorySlice';
 import DescripModal from '../components/DescripModal';
 // mock
 import USERLIST from '../_mock/user';
@@ -41,8 +42,8 @@ const TABLE_HEAD = [
   // { id: 'avatar', label: 'Avatar', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'desc', label: 'Description', alignRight: false },
-  { id: 'price', label: 'Price', alignRight: false },
-  { id: 'Availability', label: 'Availability', alignRight: false },
+  // { id: 'price', label: 'Price', alignRight: false },
+  // { id: 'Availability', label: 'Availability', alignRight: false },
   // { id: 'isVerified', label: 'Verified', alignRight: false },
   // { id: 'status', label: 'Status', alignRight: false },
   // { id: '' },
@@ -79,7 +80,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-
+ 
 export default function User() {
 
   const dispatch = useDispatch()
@@ -100,8 +101,23 @@ export default function User() {
 
   const [userData, setUserData] = useState([])
 
-  const productList = useSelector((state) => state.products)
-  console.log(productList, 'products')
+  // const productList = useSelector((state) => state.products)
+  // console.log(productList, 'products')
+
+  useEffect(() => {
+    dispatch(getCategories())
+  }, [dispatch] )
+
+  const { categories, loading } = useSelector((state) => state.categories)
+  // console.log(categories.categories, 'categories')
+
+  if (loading) {
+     console.log('loading ......')} else {console.log('not loading....')
+    }
+
+  // if (categories) {
+  //   // console.log(categories.map(item => console.log(item)), 'categories')
+  // }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -111,7 +127,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = productList.map((n) => n.name);
+      const newSelecteds = categories.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -148,7 +164,7 @@ export default function User() {
 
   const handleDelete = (id) => {
     console.log(id, 'id')
-    dispatch(deleteProduct({ id }))
+    dispatch(deleteCategory(id))
   }
 
 
@@ -169,13 +185,13 @@ export default function User() {
   // },[])
 
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - productList.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categories.length) : 0;
 
-  const filteredUsers = applySortFilter(productList, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(categories, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
-
+  console.log(categories)
   return (  
     <Page title="User">
       <Container>
@@ -198,7 +214,7 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={productList.length}
+                  rowCount={categories.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
@@ -206,8 +222,8 @@ export default function User() {
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, avatar, name, description, price, stockAvailable } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { id, category_name } = row;
+                      const isItemSelected = selected.indexOf(category_name) !== -1;
                       // console.log(avatar, 'avatar')
                       return (
                         <TableRow
@@ -219,21 +235,21 @@ export default function User() {
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, category_name)} />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <AvatarGroup>
+                            {/* <Stack direction="row" alignItems="center" spacing={2}> */}
+                              {/* <AvatarGroup>
                               {avatar && avatar.map((img, i) => (
                                 <img key={i} alt={name} src={img} 
                                 style={{ maxHeight:'50px', borderRadius:'50%', maxWidth:'50px' }}   
                                 />
                               ))}
-                              </AvatarGroup>
+                              </AvatarGroup> */}
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {category_name}
                               </Typography>
-                            </Stack>
+                            {/* </Stack> */}
                           </TableCell>
                           <TableCell align="left">
                             <Paper elevation={3} style={{padding:'7px'}}>
@@ -241,9 +257,9 @@ export default function User() {
                                 <DescripModal idForEdit={id}/>
                             </Paper>
                           </TableCell>
-                          <TableCell align="left">{price}</TableCell>
+                          {/* <TableCell align="left">{price}</TableCell> */}
                           {/* <TableCell align="left">{role}</TableCell> */}
-                          <TableCell align="left">{stockAvailable ? 'Yes' : 'No'}</TableCell>
+                          {/* <TableCell align="left">{stockAvailable ? 'Yes' : 'No'}</TableCell> */}
                           {/* <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
@@ -287,7 +303,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={productList.length}
+            count={categories.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

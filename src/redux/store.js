@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import thunk from "redux-thunk";
 import storage from 'redux-persist/lib/storage';
-// import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+
 import {
     persistStore,
     persistReducer,
@@ -14,7 +14,7 @@ import {
 } from 'redux-persist'
 import {authSlice} from './login/authSlice'
 import { productsReducer } from './products/productsSlice';
-
+import { categoriesReducer } from './products/categorySlice';
 
 const persistConfig = {
 key: 'root',
@@ -26,7 +26,8 @@ const persistedReducer = persistReducer(persistConfig, productsReducer)
 export const store = configureStore({
     reducer: {
         // login: authSlice.reducer,
-        products: productsReducer
+        products: productsReducer,
+        categories: categoriesReducer
         // devTools: true,
         // middleWare: [thunk]
     },

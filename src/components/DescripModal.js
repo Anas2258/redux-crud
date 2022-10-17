@@ -24,10 +24,11 @@ const DescripModal = ({idForEdit}) => {
 
     const [open, setOpen] = React.useState(false);
     // const [ckData, setCkData] = useState('')
-    const products = useSelector((state) => state.products)
-    const existingProduct = products.filter(product => product.id === idForEdit)
+    const { categories } = useSelector((state) => state.categories)  
+    console.log(Array.isArray(categories))
+    const existingCategory = categories.filter(product => product.id === idForEdit)
 
-    const { id,description } = existingProduct[0]
+    const { id,description } = existingCategory[0]
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -36,7 +37,7 @@ const DescripModal = ({idForEdit}) => {
       <div >
         <Button onClick={handleOpen}>
             <Typography style={{color:'black'}}>
-                Item Description...
+                {description}
             </Typography>
         </Button>
         <Modal
@@ -46,9 +47,9 @@ const DescripModal = ({idForEdit}) => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            {/* <Typography id="modal-modal-title" variant="h6" component="h2"> 
+            <Typography id="modal-modal-title" variant="h6" component="h2"> 
             {<div dangerouslySetInnerHTML={{ __html: description }} />}
-            </Typography> */}
+            </Typography>
             <Typography id="modal-modal-description" sx={{ mb: 8 }}>
             {<div dangerouslySetInnerHTML={{ __html: description }} />}
             </Typography>

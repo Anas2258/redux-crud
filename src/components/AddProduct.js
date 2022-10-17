@@ -8,7 +8,9 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Paper, Button } from '@mui/material';
+import axios from 'axios';
 import { addProduct } from '../redux/products/productsSlice';
+import { addCategory } from '../redux/products/categorySlice';
 
 export default function AddProduct() {
     const dispatch = useDispatch()
@@ -16,17 +18,21 @@ export default function AddProduct() {
 
     const [productName, setProductName] = useState('')
     const [productPrice, setProductPrice] = useState('')
-    const [stock, setStock] = useState(false)
+    // const [stock, setStock] = useState(false)
 
     const handleSubmit = (e) => {
         const addData = {
-            productName, productPrice, stock
+            category_name:productName, description:productPrice,
         }
         e.preventDefault();
-        dispatch(addProduct(addData))
-        console.log(productName, productPrice, stock)
+        dispatch(addCategory(addData))
+        console.log(productName, productPrice)
         navigate('/dashboard/user')
-
+        // axios.post('https://admindemo.bigbyte.app/index.php/api/categories',{
+        //     category_name:productName, description:productPrice
+        // })
+        // .then((res) => console.log(res))
+        // .catch((err) => console.log(err))
     }
     return (
         <Paper elevation={3}>
@@ -50,10 +56,10 @@ export default function AddProduct() {
                         <TextField
                             required
                             id="price"
-                            type='number'
+                            type='text'
                             name="firstName"
                             variant="standard"
-                            label='price'
+                            label='description'
                             value={productPrice}
                             onChange={(e) => setProductPrice(e.target.value)}
                         />
@@ -71,12 +77,12 @@ export default function AddProduct() {
                             </Button>
                         </label>
                     </Grid> */}
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                         <FormControlLabel
                             control={<Checkbox color="secondary" name="saveAddress" value={stock} onChange={(e) => setStock(e.target.checked)} />}
                             label="Available"
                         />
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={12}>
                         <Button type='submit' variant='contained'>
                             {/* <Button component={RouterLink} to='/dashboard/user' type='submit' variant='contained'> */}

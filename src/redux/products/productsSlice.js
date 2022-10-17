@@ -1,4 +1,5 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 // const imgList = JSON.parse(localStorage.getItem('imageList'))
 // const fileList = imgList && imgList.map(img => img.preview)
@@ -10,6 +11,8 @@ const initialState = [
     {id: '3', name: 'mouse', description:'Description for Item: mouse', price: 40, stockAvailable: true, avatar:["https://gravatar.com/avatar/68f8bc6aab83b11632c1ccce52f0a98a?s=400&d=robohash&r=x"]},
     {id: '4', name: 'television', description:'Description for Item: television', price: 250, stockAvailable: true,avatar:["https://gravatar.com/avatar/747b37e67e78ab71cc729040f6c73dc9?s=400&d=robohash&r=x"]}
 ]
+
+
 
 export const productsSlice = createSlice({
     name: 'products',
@@ -58,7 +61,7 @@ export const productsSlice = createSlice({
         deleteProduct:(state, action) => {
             return state.filter((product) => product.id !== action.payload.id)
         },
-    }
+    },
 })
 
 
