@@ -2,6 +2,7 @@ import { React, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Button } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter'
@@ -25,6 +26,7 @@ const Editor = () => {
       }, [dispatch] )
     
     const {categories, loading}  = useSelector((state) => state.categories)
+    // console.log(cater)
     
     const existingCategory = categories.filter(category => category.id === parseInt(params.id, 10))
       
@@ -47,7 +49,15 @@ const Editor = () => {
         navigate('/dashboard/user')
     }
 
+//     {!categories &&
+         
+//             <CircularProgress />
+//     :
+// }    
     return (
+        <>
+        {!categories ? <CircularProgress />
+        :
         <Container sx={{ marginTop: 10 }} >
             <Button variant='contained' onClick={handleClick} sx={{ mb: 5 }}>
                 Click me
@@ -81,6 +91,9 @@ const Editor = () => {
             />
 
         </Container>
+    }
+        </>
+        
     )
 }
 

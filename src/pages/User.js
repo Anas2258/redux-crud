@@ -23,6 +23,7 @@ import {
   TablePagination,
   AvatarGroup,
 } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress'
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -99,21 +100,29 @@ export default function User() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [userData, setUserData] = useState([])
+  // const [categoryData, setCategoryData] = useState()
 
   // const productList = useSelector((state) => state.products)
   // console.log(productList, 'products')
-
+  const { categories, loading } = useSelector((state) => state.categories)
   useEffect(() => {
     dispatch(getCategories())
   }, [dispatch] )
 
-  const { categories, loading } = useSelector((state) => state.categories)
+  useEffect(() => {
+    console.log(categories)
+  },[categories])
+  // setCategoryData(categoryData, 'categories')
+  console.log(categories, 'categories')
   // console.log(categories.categories, 'categories')
 
-  if (loading) {
-     console.log('loading ......')} else {console.log('not loading....')
-    }
+
+  // console.log(categoryData, 'state from local')
+
+
+  // if (loading) {
+  //    console.log('loading ......')} else {console.log('not loading....')
+  //   }
 
   // if (categories) {
   //   // console.log(categories.map(item => console.log(item)), 'categories')
@@ -127,7 +136,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = categories.map((n) => n.name);
+      const newSelecteds = categories && categories.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -162,39 +171,81 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const handleDelete = (id) => {
-    console.log(id, 'id')
-    dispatch(deleteCategory(id))
-  }
-
-
-  // const getUsers = () => {
-  //   axios({
-  //     method:'get',
-  //     url: 'https://reqres.in/api/users?page=1'
-  //   })
-  //   .then((res) => {
-  //     console.log(res.data.data)
-  //     setUserData(res.data.data)
-  //   })
-  //   .catch((err) => console.log(err))
+  // const handleDelete = async (id) => {
+  //   console.log(id, 'id')
+  //   try {
+  //     await dispatch(deleteCategory(id))
+  //     console.log('success')
+  //     navigate('/dashboard/user')
+  //   }
+  //   catch {
+  //     console.log('error')
+  //   }
   // }
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this tour ?")) {
+      dispatch(deleteCategory(id))
+    }
+  };
+
+  useEffect(() => {
+  //   // const headers = {"Access-Control-Allow-Origin" : "*"}
+    axios.get('https://b6e5-2405-201-2009-c1e2-5e8f-9b62-8f91-83a5.ngrok.io/category', {headers:{
+      "ngrok-skip-browser-warning": "69420",
+    }})
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
+    // const config = {
+    //   method: 'get',
+    //   url: 'https://5201-2405-201-2009-c1e2-5e8f-9b62-8f91-83a5.ngrok.io/category',
+    //   headers: {"Access-Control-Allow-Origin" : "*" },
+    //   // data : data
+    // };
+    
+  //   // axios(config)
+  //   // .then((response) => {
+  //   //   console.log(JSON.stringify(response.data));
+  //   // })
+  //   // .catch((error) => {
+  //   //   console.log(error);
+  //   // });
+    
+  },[])
+  
+
+  
+
 
   // useEffect(() => {
   //   getUsers()
   // },[])
 
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categories.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categories && categories.length) : 0;
 
-  const filteredUsers = applySortFilter(categories, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(categories && categories, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
-  console.log(categories)
-  return (  
-    <Page title="User">
-      <Container>
+  // console.log(categories)
+  // {!categories ? 
+  //   return (
+  //     <CircularProgress />
+  //     :
+  //     'hello'
+  //   )
+  console.log(process.env.REACT_APP_BASE_URL)
+  return (
+      <>
+      {loading ?
+        <Container sx={{marginLeft: 50}}>
+          <CircularProgress />
+        </Container> 
+        
+        :
+        <Page title="User">
+        <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             User
@@ -222,20 +273,20 @@ export default function User() {
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, category_name } = row;
-                      const isItemSelected = selected.indexOf(category_name) !== -1;
+                      const { _id, name } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
                       // console.log(avatar, 'avatar')
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
                           <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, category_name)} />
+                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             {/* <Stack direction="row" alignItems="center" spacing={2}> */}
@@ -247,14 +298,14 @@ export default function User() {
                               ))}
                               </AvatarGroup> */}
                               <Typography variant="subtitle2" noWrap>
-                                {category_name}
+                                {name}
                               </Typography>
                             {/* </Stack> */}
                           </TableCell>
                           <TableCell align="left">
                             <Paper elevation={3} style={{padding:'7px'}}>
                               {/* {console.log(description, 'descrip')} */}
-                                <DescripModal idForEdit={id}/>
+                                <DescripModal idForEdit={_id}/>
                             </Paper>
                           </TableCell>
                           {/* <TableCell align="left">{price}</TableCell> */}
@@ -268,11 +319,14 @@ export default function User() {
 
                           <TableCell align="right">
                             {/* <UserMoreMenu />   */}
-                            <Button variant='contained' onClick={() => handleDelete(id)}><Iconify icon="eva:edit-fill" width={14} height={14} />Delete </Button>
+                            <Button variant='contained' component={RouterLink} to="#" onClick={() => handleDelete(_id)}>
+                              <Iconify icon="eva:edit-fill" width={14} height={14} />
+                              Delete 
+                            </Button>
                           </TableCell>
                           <TableCell align="right">
                             {/* <UserMoreMenu />   */}
-                            <Button variant="contained" component={RouterLink} to={`/editProduct/${id}`} startIcon={<Iconify icon="eva:edit-fill" width={14} height={14} />}>
+                            <Button variant="contained" component={RouterLink} to={`/editProduct/${_id}`} startIcon={<Iconify icon="eva:edit-fill" width={14} height={14} />}>
                               Edit
                             </Button>
                           </TableCell>
@@ -311,6 +365,9 @@ export default function User() {
           />
         </Card>
       </Container>
-    </Page>
+      </Page>
+      }
+      </>
+
   );
 }

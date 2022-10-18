@@ -24,11 +24,12 @@ const DescripModal = ({idForEdit}) => {
 
     const [open, setOpen] = React.useState(false);
     // const [ckData, setCkData] = useState('')
-    const { categories } = useSelector((state) => state.categories)  
-    console.log(Array.isArray(categories))
-    const existingCategory = categories.filter(product => product.id === idForEdit)
+    const { categories } = useSelector((state) => state.categories)
+    // console.log(categories  )  
+    // console.log(Array.isArray(categories))
+    const existingCategory = categories.filter(product => product._id === idForEdit)
 
-    const { id,description } = existingCategory[0]
+    const { _id,description } = existingCategory[0]
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -54,7 +55,7 @@ const DescripModal = ({idForEdit}) => {
             {<div dangerouslySetInnerHTML={{ __html: description }} />}
             </Typography>
 
-            <Button variant='contained'  component={RouterLink} to={`/ckEditor/${id}`}>
+            <Button variant='contained'  component={RouterLink} to={`/ckEditor/${_id}`}>
               Edit
             </Button>
           </Box>

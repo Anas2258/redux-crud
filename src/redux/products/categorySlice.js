@@ -10,8 +10,10 @@ const initialState = {
 export const getCategories = createAsyncThunk('categories/getCategories', 
     async() => {
         try{
-            const response = await axios.get('https://admindemo.bigbyte.app/index.php/api/categories')
-            return response.data.categories
+            const response = await axios.get('https://b6e5-2405-201-2009-c1e2-5e8f-9b62-8f91-83a5.ngrok.io/category',{headers:{
+                "ngrok-skip-browser-warning": "69420",
+              }})
+            return response.data.data
         } catch (err) {
             console.log(err)
         }
@@ -19,13 +21,20 @@ export const getCategories = createAsyncThunk('categories/getCategories',
 )
 
 export const addCategory= createAsyncThunk('categories/addCategory', 
+    
     async(values) => {
         console.log(values)
         try{
-            const response = await axios.post('https://admindemo.bigbyte.app/index.php/api/categories', {
-                category_name: values.category_name,    
-                description: values.description
-            })
+            const response = await axios.post('https://b6e5-2405-201-2009-c1e2-5e8f-9b62-8f91-83a5.ngrok.io/category',{headers:{
+                "ngrok-skip-browser-warning": "69420",
+              }},{
+                name: values.name,
+                description:values.description
+            }
+                // name: values.name,    
+                // description: values.description
+                // values
+            )
             return response.data
         } catch (err) {
             console.log(err)
@@ -69,9 +78,16 @@ export const categoriesSlice = createSlice({
         [addCategory.rejected]: (state, action) => {
             console.log('errrorrr')
         },
-        [deleteCategory.fulfilled]: (state) => {
-            console.log('deleted succefully')
-        }
+        [deleteCategory.fulfilled]: (state, action) => {
+            state.loading = false;
+            const {
+              arg: { id },
+            } = action.meta;
+            if (id) {
+              state.categories = state.categories.filter((item) => item.id !== id);
+            }
+            console.log('deleted successfully')
+          },
     }
 })
 
