@@ -7,7 +7,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/base64uploadadapter'
 import { editDesc } from '../redux/products/productsSlice';
-import { getCategories } from '../redux/products/categorySlice';
+import { getCategories, editCategory } from '../redux/products/categorySlice';
 
 
 
@@ -26,12 +26,12 @@ const Editor = () => {
       }, [dispatch] )
     
     const {categories, loading}  = useSelector((state) => state.categories)
-    // console.log(cater)
+    // console.log(categories.map(item => item._id))
     
-    const existingCategory = categories.filter(category => category.id === parseInt(params.id, 10))
+    const existingCategory = categories.filter(category => category._id === params.id)
       
-    // const { description } = existingCategory[0]
-    // console.log(description)
+    const { description } = existingCategory[0]
+    console.log(description)
     
     // console.log(existingCategory)
     // const { avatar, name, price, stockAvailable, description } = existingProduct[0]
@@ -42,10 +42,10 @@ const Editor = () => {
     const handleClick = () => {
         const editData = {
             id: params.id,
-            ckData
+            description:ckData
           }
         console.log(editData)
-        dispatch(editDesc(editData))
+        dispatch(editCategory(editData))
         navigate('/dashboard/user')
     }
 
@@ -71,7 +71,7 @@ const Editor = () => {
                     // .then(res => console.log(res))
                     // .catch( (err) => console.log(err))
                 }
-                // data={description}
+                data={description}
                 onReady={editor => {
                     // You can store the "editor" and use when it is needed.
                     console.log('Editor is ready to use!', editor);

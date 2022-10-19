@@ -109,9 +109,9 @@ export default function User() {
     dispatch(getCategories())
   }, [dispatch] )
 
-  useEffect(() => {
-    console.log(categories)
-  },[categories])
+  // useEffect(() => {
+  //   console.log(categories)
+  // },[categories])
   // setCategoryData(categoryData, 'categories')
   console.log(categories, 'categories')
   // console.log(categories.categories, 'categories')
@@ -171,56 +171,41 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  // const handleDelete = async (id) => {
-  //   console.log(id, 'id')
-  //   try {
-  //     await dispatch(deleteCategory(id))
-  //     console.log('success')
-  //     navigate('/dashboard/user')
-  //   }
-  //   catch {
-  //     console.log('error')
-  //   }
-  // }
-
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this tour ?")) {
       dispatch(deleteCategory(id))
     }
   };
 
-  useEffect(() => {
-  //   // const headers = {"Access-Control-Allow-Origin" : "*"}
-    axios.get('https://b6e5-2405-201-2009-c1e2-5e8f-9b62-8f91-83a5.ngrok.io/category', {headers:{
-      "ngrok-skip-browser-warning": "69420",
-    }})
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
-    // const config = {
-    //   method: 'get',
-    //   url: 'https://5201-2405-201-2009-c1e2-5e8f-9b62-8f91-83a5.ngrok.io/category',
-    //   headers: {"Access-Control-Allow-Origin" : "*" },
-    //   // data : data
-    // };
-    
-  //   // axios(config)
-  //   // .then((response) => {
-  //   //   console.log(JSON.stringify(response.data));
-  //   // })
-  //   // .catch((error) => {
-  //   //   console.log(error);
-  //   // });
-    
-  },[])
   
-
   
-
-
+  // const list = categories.map(item => item.images.map(i => i.img))
+  
+  // console.log(list)
   // useEffect(() => {
-  //   getUsers()
+  // //   // const headers = {"Access-Control-Allow-Origin" : "*"}
+  //   axios.get('https://6db3-2405-201-2009-c839-964d-9693-5038-a4a2.ngrok.io/category', {headers:{
+  //     "ngrok-skip-browser-warning": "69420",
+  //   }})
+  //   .then(res => console.log(res))
+  //   .catch(err => console.log(err))
+  //   // const config = {
+  //   //   method: 'get',
+  //   //   url: 'https://5201-2405-201-2009-c1e2-5e8f-9b62-8f91-83a5.ngrok.io/category',
+  //   //   headers: {"Access-Control-Allow-Origin" : "*" },
+  //   //   // data : data
+  //   // };
+    
+  // //   // axios(config)
+  // //   // .then((response) => {
+  // //   //   console.log(JSON.stringify(response.data));
+  // //   // })
+  // //   // .catch((error) => {
+  // //   //   console.log(error);
+  // //   // });
+    
   // },[])
-
+  // console.log(categories.map(item => item.images.map(item => item.img)))
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - categories && categories.length) : 0;
 
@@ -228,14 +213,7 @@ export default function User() {
 
   const isUserNotFound = filteredUsers.length === 0;
 
-  // console.log(categories)
-  // {!categories ? 
-  //   return (
-  //     <CircularProgress />
-  //     :
-  //     'hello'
-  //   )
-  console.log(process.env.REACT_APP_BASE_URL)
+  // console.log(process.env.REACT_APP_BASE_URL)
   return (
       <>
       {loading ?
@@ -273,7 +251,7 @@ export default function User() {
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { _id, name } = row;
+                      const { _id, name, images } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
                       // console.log(avatar, 'avatar')
                       return (
@@ -289,23 +267,25 @@ export default function User() {
                             <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
-                            {/* <Stack direction="row" alignItems="center" spacing={2}> */}
-                              {/* <AvatarGroup>
-                              {avatar && avatar.map((img, i) => (
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              <AvatarGroup>
+                              {images && images.map((img, i) => (
                                 <img key={i} alt={name} src={img} 
                                 style={{ maxHeight:'50px', borderRadius:'50%', maxWidth:'50px' }}   
                                 />
                               ))}
-                              </AvatarGroup> */}
+                              </AvatarGroup>
+                              {/* <img src='public/assets/images/1666169028673.png' alt='name' /> */}
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
-                            {/* </Stack> */}
+                            </Stack>
                           </TableCell>
                           <TableCell align="left">
                             <Paper elevation={3} style={{padding:'7px'}}>
                               {/* {console.log(description, 'descrip')} */}
                                 <DescripModal idForEdit={_id}/>
+                                
                             </Paper>
                           </TableCell>
                           {/* <TableCell align="left">{price}</TableCell> */}

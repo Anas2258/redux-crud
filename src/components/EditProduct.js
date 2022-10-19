@@ -10,7 +10,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { Paper, Button, Box } from '@mui/material';
 import { RMIUploader } from "react-multiple-image-uploader";
 import { useDropzone } from 'react-dropzone'
-import { editProduct } from '../redux/products/productsSlice';
+import { editCategory,addImage } from '../redux/products/categorySlice';
+// import { addImage } from '../redux/products/categorySlice';
 
 const thumbsContainer = {
   display: "flex",
@@ -80,22 +81,26 @@ export default function EditProduct() {
   const params = useParams()
   // console.log(params.id)
 
-  const productList = useSelector((state) => state.products)
-  const existingProduct = productList.filter(product => product.id === params.id)
-  // console.log(productList )
-  // console.log(existingProduct, 'existing')
-  const { avatar, name, price, stockAvailable } = existingProduct[0]
+  // const productList = useSelector((state) => state.products)
+  // const existingProduct = productList.filter(product => product.id === params.id)
+
+  const { categories, loading } = useSelector((state) => state.categories)
+  console.log(categories )
+
+  const existingCategory = categories.filter(category => category._id === params.id)
+  console.log(existingCategory, 'existingCategory')
+  const { name, description } = existingCategory[0]
   // console.log(stockAvailable)
 
   const [selectedImage, setSelectedImage] = useState(null);
   // console.log(selectedImage, 'selectedImage')
   const [imageUrl, setImageUrl] = useState([]);
-  const [productName, setProductName] = useState(name)
-  const [productPrice, setProductPrice] = useState(price)
-  const [stock, setStock] = useState(stockAvailable)
-  const [visible, setVisible] = useState(false);
+  const [categoryName, setCategoryName] = useState(name)
+  const [categoryDesc, setCategoryDesc] = useState(description)
+  // const [stock, setStock] = useState(tru)
+  // const [visible, setVisible] = useState(false);
   const [files, setFiles] = useState([]);
-  const [percentage, setPercentage] = useState(0)
+  // const [percentage, setPercentage] = useState(0)
 
   console.log(files, 'files')
   // console.log(stock, 'bool')
@@ -106,21 +111,27 @@ export default function EditProduct() {
   //   }
   // }, [selectedImage]);
 
-  const imgUrlList = files.map(item => item.preview)
+  // const imgUrlList = files.map(item => item.preview)
 
   // console.log(imageUrl, 'imageUrl')
-  console.log(imgUrlList, 'url list')
+  // console.log(imgUrlList, 'url list')
   const handleSubmit = (e) => {
     const editData = {
       id: params.id,
-      imgUrlList,
-      productName, productPrice, stock
+      name:categoryName, description:categoryDesc
     }
     e.preventDefault();
-    // localStorage.setItem('imageList', JSON.stringify(files))
-    dispatch(editProduct(editData))
-    console.log(imageUrl, productName, productPrice, stock)
+    dispatch(editCategory(editData))
+    console.log(imageUrl, categoryName, categoryDesc)
     navigate('/dashboard/user')
+  }
+
+  const handleImageUpload = () => {
+    const addImg = {
+      id: params.id,
+      files
+    }
+    dispatch(addImage(addImg))
   }
 
   // const handleSetVisible = () => {
@@ -152,7 +163,7 @@ export default function EditProduct() {
     // accept: "image/*",
     noClick:true,
     onDrop: (acceptedFiles) => {
-      setPercentage(0)
+      // setPercentage(0)
       console.log("accepted", acceptedFiles);
       setFiles(
         acceptedFiles.map((file) =>
@@ -229,6 +240,13 @@ export default function EditProduct() {
               )}
             </div>
             <aside style={thumbsContainer}>{thumbs}</aside>
+            <Grid item xs={12}>
+            <Button variant='contained' onClick={handleImageUpload}>
+              {/* <Button component={RouterLink} to='/dashboard/user' type='submit' variant='contained'> */}
+              Add Image(s)
+            </Button>
+          </Grid>
+              
             {/* <div className="App"> */}
             {/* <button onClick={handleSetVisible}>Show Me</button> */}
             {/* <RMIUploader
@@ -262,28 +280,28 @@ export default function EditProduct() {
               name="firstName"
               label="Name"
               variant="standard"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               required
-              id="price"
-              type='number'
+              id="description"
+              type='text'
               name="firstName"
               variant="standard"
-              label='price'
-              value={productPrice}
-              onChange={(e) => setProductPrice(e.target.value)}
+              label='description'
+              value={categoryDesc}
+              onChange={(e) => setCategoryDesc(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <FormControlLabel
               control={<Checkbox color="secondary" name="saveAddress" checked={stock} value={stock} onChange={(e) => setStock(e.target.checked)} />}
               label="Available"
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12}>
             <Button type='submit' variant='contained'>
               {/* <Button component={RouterLink} to='/dashboard/user' type='submit' variant='contained'> */}
