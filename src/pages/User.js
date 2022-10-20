@@ -100,7 +100,7 @@ export default function User() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // const [categoryData, setCategoryData] = useState()
+  // const [categoryData, setCategoryData] = useState(categories || [])
 
   // const productList = useSelector((state) => state.products)
   // console.log(productList, 'products')
@@ -177,8 +177,6 @@ export default function User() {
     }
   };
 
-  
-  
   // const list = categories.map(item => item.images.map(i => i.img))
   
   // console.log(list)
@@ -220,7 +218,6 @@ export default function User() {
         <Container sx={{marginLeft: 50}}>
           <CircularProgress />
         </Container> 
-        
         :
         <Page title="User">
         <Container>
@@ -348,6 +345,5 @@ export default function User() {
       </Page>
       }
       </>
-
   );
 }

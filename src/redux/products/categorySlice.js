@@ -1,7 +1,6 @@
 import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 const initialState = {
     categories: [],
     loading: false
@@ -63,18 +62,25 @@ export const editCategory = createAsyncThunk('categories/editCategory',
 
 export const addImage = createAsyncThunk('categories/addImage',
     async(images) => {
-        console.log(images)
+        const {id, sentImgs} = images
         const formData = new FormData()
-        formData.append('img', images.files)
-        formData.append('category', images.id)
-        console.log(formData, 'formData')
+        sentImgs.forEach(item => {
+            formData.append('images', item)
+        } )
+        
+        // formData.append('category', images.id)
+        
+        console.log(Object.fromEntries(formData))
         try{
-            const response = await axios({
-                method:'post',
-                url:process.env.REACT_APP_IMG_URL,
-                data:formData,
-                headers: {"Content-Type": "multipart/form-data"}
-            })
+            const response = await axios.post(
+            `${process.env.REACT_APP_IMG_URL}/${id}`, 
+            formData, {headers: {"Content-Type": "multipart/form-data"}})
+            //     method:'post',
+            //     url:`${process.env.REACT_APP_IMG_URL}/${images.id}`,
+            //     data:formData,
+            //     headers: {"Content-Type": "multipart/form-data"}
+            // })
+            console.log(response, 'response')
             return response
         }
         catch(err){
@@ -119,7 +125,7 @@ export const categoriesSlice = createSlice({
         [addImage.fulfilled]: (state, action) => {
             // console.log(action.meta)
             // state.categories.images.concat(action.payload.data.data)
-            console.log('fulfilled')
+            console.log(action.payload)
         },
         [addImage.rejected]: (state, action) => {
             console.log('errrorrr')

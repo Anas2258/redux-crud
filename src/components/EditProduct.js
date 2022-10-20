@@ -10,7 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { Paper, Button, Box } from '@mui/material';
 import { RMIUploader } from "react-multiple-image-uploader";
 import { useDropzone } from 'react-dropzone'
-import { editCategory,addImage } from '../redux/products/categorySlice';
+import { editCategory, addImage } from '../redux/products/categorySlice';
 // import { addImage } from '../redux/products/categorySlice';
 
 const thumbsContainer = {
@@ -85,11 +85,11 @@ export default function EditProduct() {
   // const existingProduct = productList.filter(product => product.id === params.id)
 
   const { categories, loading } = useSelector((state) => state.categories)
-  console.log(categories )
+  console.log(categories)
 
   const existingCategory = categories.filter(category => category._id === params.id)
   console.log(existingCategory, 'existingCategory')
-  const { name, description } = existingCategory[0]
+  const { name, description, images } = existingCategory[0]
   // console.log(stockAvailable)
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -97,6 +97,7 @@ export default function EditProduct() {
   const [imageUrl, setImageUrl] = useState([]);
   const [categoryName, setCategoryName] = useState(name)
   const [categoryDesc, setCategoryDesc] = useState(description)
+  const [sentImgs, setSentImgs] = useState()
   // const [stock, setStock] = useState(tru)
   // const [visible, setVisible] = useState(false);
   const [files, setFiles] = useState([]);
@@ -118,21 +119,22 @@ export default function EditProduct() {
   const handleSubmit = (e) => {
     const editData = {
       id: params.id,
-      name:categoryName, description:categoryDesc
+      name: categoryName, description: categoryDesc, sentImgs
     }
     e.preventDefault();
     dispatch(editCategory(editData))
+    dispatch(addImage(editData))
     console.log(imageUrl, categoryName, categoryDesc)
     navigate('/dashboard/user')
   }
 
-  const handleImageUpload = () => {
-    const addImg = {
-      id: params.id,
-      files
-    }
-    dispatch(addImage(addImg))
-  }
+  // const handleImageUpload = () => {
+  //   const addImg = {
+  //     id: params.id,
+  //     sentImgs
+  //   }
+    
+  // }
 
   // const handleSetVisible = () => {
   //   setVisible(true);
@@ -161,9 +163,11 @@ export default function EditProduct() {
     open
   } = useDropzone({
     // accept: "image/*",
-    noClick:true,
+    noClick: true,
     onDrop: (acceptedFiles) => {
-      // setPercentage(0)
+      const uploadedFile  = acceptedFiles
+      console.log(uploadedFile)
+      setSentImgs(uploadedFile)
       console.log("accepted", acceptedFiles);
       setFiles(
         acceptedFiles.map((file) =>
@@ -175,7 +179,7 @@ export default function EditProduct() {
     }
   });
 
-  
+
   const style = React.useMemo(
     () => ({
       ...baseStyle,
@@ -185,7 +189,7 @@ export default function EditProduct() {
     }),
     [isDragActive, isDragReject, isDragAccept]
   );
-  
+
 
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
@@ -194,7 +198,14 @@ export default function EditProduct() {
       </div>
     </div>
   ));
-
+  
+  const existingThumbs = images && images.map(item => (
+    <div style={thumb}>
+      <div style={thumbInner}>
+        <img alt="existing" src={item} style={img} />
+      </div>
+    </div>
+  ));
 
   useEffect(
     () => () => {
@@ -230,23 +241,26 @@ export default function EditProduct() {
                 <p>Drop the files here ...</p>
               ) : (
                 <>
-                  <p style={{color: 'black', fontSize: '18px', }}>Drag 'n' drop some files to upload</p>
-                  <p style={{ color:'black', fontSize: '18px' }}>or</p>
-                  <button type="button" onClick={open} 
-                    style={{ padding:'7px', width:'150px', color:'#4083f7',backgroundColor: "#fafafa", borderRadius:'5px', borderColor: '#4083f7' }}>
+                  <p style={{ color: 'black', fontSize: '18px', }}>Drag 'n' drop some files to upload</p>
+                  <p style={{ color: 'black', fontSize: '18px' }}>or</p>
+                  <button type="button" onClick={open}
+                    style={{ padding: '7px', width: '150px', color: '#4083f7', backgroundColor: "#fafafa", borderRadius: '5px', borderColor: '#4083f7' }}>
                     Select Files
                   </button>
                 </>
               )}
             </div>
-            <aside style={thumbsContainer}>{thumbs}</aside>
+
+            
+
+              <aside style={thumbsContainer}>{thumbs}</aside>
+{/*              
             <Grid item xs={12}>
-            <Button variant='contained' onClick={handleImageUpload}>
-              {/* <Button component={RouterLink} to='/dashboard/user' type='submit' variant='contained'> */}
-              Add Image(s)
-            </Button>
-          </Grid>
-              
+              <Button variant='contained' onClick={handleImageUpload}> */}
+                {/* Add Image(s)
+              </Button>
+            </Grid> */}
+
             {/* <div className="App"> */}
             {/* <button onClick={handleSetVisible}>Show Me</button> */}
             {/* <RMIUploader

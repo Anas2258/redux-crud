@@ -86,14 +86,14 @@ export default function AddProduct() {
     // const [imgUrls, setImgUrls] = useState([])
     // const [stock, setStock] = useState(false)
     
-    // console.log(files, 'imgs')
+    console.log(files, 'imgs')
 
-    const imgUrlList = files.map(item => item.preview)
-    console.log(imgUrlList, 'imageList')
+    // const imgUrlList = files.map(item => item.preview)
+    // console.log(imgUrlList, 'imageList')
 
     const handleSubmit = async (e) => {
         const addData = {
-            name:productName, description:productPrice
+            name:productName, description:productPrice, images: files
         }
         e.preventDefault();
         try {
@@ -170,12 +170,12 @@ export default function AddProduct() {
         
     return (
         <Paper elevation={3} sx={{padding:5}}>
-            <Typography variant="h6" gutterBottom>
+            {/* <Typography variant="h6" gutterBottom>
                 Add Category Image
-            </Typography>
+            </Typography> */}
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12}>
+                    {/* <Grid item xs={12}>
                     <div {...getRootProps({ className: "dropzone", style })}>
               <input {...getInputProps()} />
               {isDragActive ? (
@@ -192,7 +192,7 @@ export default function AddProduct() {
               )}
             </div>
             <aside style={thumbsContainer}>{thumbs}</aside>
-                </Grid>
+                </Grid> */}
                 <Stack sx={{marginLeft:60}}>
                 <Typography variant="h6" gutterBottom>
                 Add Category Stats
