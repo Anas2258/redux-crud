@@ -9,6 +9,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Paper, Button, Box } from '@mui/material';
 import { RMIUploader } from "react-multiple-image-uploader";
+import LinearProgress from '@mui/material/LinearProgress';
 import { useDropzone } from 'react-dropzone'
 import { editCategory, addImage } from '../redux/products/categorySlice';
 // import { addImage } from '../redux/products/categorySlice';
@@ -105,7 +106,7 @@ export default function EditProduct() {
 
   console.log(files, 'files')
   // console.log(stock, 'bool')
-
+  console.log(percentage, 'percentage')
   // useEffect(() => {
   //   if (selectedImage) {
   //     setImageUrl(URL.createObjectURL(selectedImage));
@@ -125,7 +126,9 @@ export default function EditProduct() {
     dispatch(editCategory(editData))
     dispatch(addImage(editData))
     console.log(imageUrl, categoryName, categoryDesc)
-    navigate('/dashboard/user')
+    // if(percentage >= 100){
+      navigate('/dashboard/user')
+    // }
   }
 
   // const handleImageUpload = () => {
@@ -254,6 +257,7 @@ export default function EditProduct() {
             
 
               <aside style={thumbsContainer}>{thumbs}</aside>
+              <LinearProgress variant="determinate" value={percentage} />
 {/*              
             <Grid item xs={12}>
               <Button variant='contained' onClick={handleImageUpload}> */}

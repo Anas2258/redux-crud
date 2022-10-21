@@ -267,7 +267,7 @@ export default function User() {
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <AvatarGroup>
                               {images && images.map((img, i) => (
-                                <img key={i} alt={name} src={img} 
+                                <img key={i} alt={name} src={img.img} 
                                 style={{ maxHeight:'50px', borderRadius:'50%', maxWidth:'50px' }}   
                                 />
                               ))}
