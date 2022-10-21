@@ -101,7 +101,7 @@ export default function EditProduct() {
   // const [stock, setStock] = useState(tru)
   // const [visible, setVisible] = useState(false);
   const [files, setFiles] = useState([]);
-  // const [percentage, setPercentage] = useState(0)
+  const [percentage, setPercentage] = useState(0)
 
   console.log(files, 'files')
   // console.log(stock, 'bool')
@@ -119,7 +119,7 @@ export default function EditProduct() {
   const handleSubmit = (e) => {
     const editData = {
       id: params.id,
-      name: categoryName, description: categoryDesc, sentImgs
+      name: categoryName, description: categoryDesc, sentImgs, setPercentage
     }
     e.preventDefault();
     dispatch(editCategory(editData))

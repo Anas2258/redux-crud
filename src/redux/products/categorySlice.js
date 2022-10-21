@@ -62,12 +62,21 @@ export const editCategory = createAsyncThunk('categories/editCategory',
 
 export const addImage = createAsyncThunk('categories/addImage',
     async(images) => {
-        const {id, sentImgs} = images
+        const {id, sentImgs, setPercentage} = images
         const formData = new FormData()
         sentImgs.forEach(item => {
             formData.append('images', item)
         } )
-        
+        // const percent  = 0
+        // const config = {
+        //     onUploadProgress: (progressEvent) => {
+        //         const {loaded, total} = progressEvent
+        //         percent = Math.floor((loaded * 100) / total)
+        //         console.log( `${loaded}kb of ${total}kb | ${percent}%` ) // just to see whats
+
+
+        //     }
+        // }
         // formData.append('category', images.id)
         
         console.log(Object.fromEntries(formData))
