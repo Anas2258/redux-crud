@@ -25,7 +25,7 @@ storage,
 const persistedReducer = persistReducer(persistConfig, productsReducer)
 export const store = configureStore({
     reducer: {
-        // login: authSlice.reducer,
+        login: authSlice.reducer,
         products: productsReducer,
         categories: categoriesReducer
         // devTools: true,

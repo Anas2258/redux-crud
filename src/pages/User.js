@@ -40,13 +40,13 @@ import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  // { id: 'avatar', label: 'Avatar', alignRight: false },
+  { id: 'avatar', label: 'Avatar', alignRight: false },
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'desc', label: 'Description', alignRight: false },
-  // { id: 'price', label: 'Price', alignRight: false },
-  // { id: 'Availability', label: 'Availability', alignRight: false },
-  // { id: 'isVerified', label: 'Verified', alignRight: false },
-  // { id: 'status', label: 'Status', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+    // { id: 'price', label: 'Price', alignRight: false },
+    // { id: 'Availability', label: 'Availability', alignRight: false },
+    // { id: 'isVerified', label: 'Verified', alignRight: false },
+    // { id: 'status', label: 'Status', alignRight: false },
   // { id: '' },
 ];
 
@@ -248,7 +248,7 @@ export default function User() {
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { _id, name, images } = row;
+                      const { _id, name,avatar, email,first_name, last_name  } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
                       // console.log(avatar, 'avatar')
                       return (
@@ -265,28 +265,31 @@ export default function User() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <AvatarGroup>
-                              {images && images.map((img, i) => (
-                                <img key={i} alt={name} src={img.img} 
+                              {/* <AvatarGroup> */}
+                              {/* {images && images.map((img, i) => ( */}
+                                <img alt={name} src={avatar} 
                                 style={{ maxHeight:'50px', borderRadius:'50%', maxWidth:'50px' }}   
                                 />
-                              ))}
-                              </AvatarGroup>
+                              {/* ))} */}
+                              {/* </AvatarGroup> */}
                               {/* <img src='public/assets/images/1666169028673.png' alt='name' /> */}
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
+                              
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">
-                            <Paper elevation={3} style={{padding:'7px'}}>
+                          <TableCell align='left'>
+                            <Typography variant="subtitle2" noWrap>
+                                {first_name}  {last_name}
+                              </Typography>
+                          </TableCell>
+                          {/* <TableCell align="left">
+                            <Paper elevation={3} style={{padding:'7px'}}> */}
                               {/* {console.log(description, 'descrip')} */}
-                                <DescripModal idForEdit={_id}/>
+                                {/* <DescripModal idForEdit={_id}/>
                                 
                             </Paper>
-                          </TableCell>
-                          {/* <TableCell align="left">{price}</TableCell> */}
-                          {/* <TableCell align="left">{role}</TableCell> */}
+                          </TableCell> */}
+                          <TableCell align="left">{email}</TableCell>
+                          {/* <TableCell align="left">{first_name}</TableCell> */}
                           {/* <TableCell align="left">{stockAvailable ? 'Yes' : 'No'}</TableCell> */}
                           {/* <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
